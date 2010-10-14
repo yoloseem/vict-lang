@@ -92,7 +92,11 @@ class Dictionary(Expression, dict):
     def __repr__(self):
         if not self:
             return "Dictionary()"
-        return "Dictionary({0})".format(dict.__repr__(self))
+        keys = [(repr(x), x) for x in self.keys()]
+        keys.sort()
+        repr_dict = [(x+": "+repr(self[y])) for x, y in keys]
+        repr_dict = "{"+str.join(", ", repr_dict)+"}"
+        return "Dictionary({0})".format(repr_dict)
 
 class Identifier(Expression):
 
