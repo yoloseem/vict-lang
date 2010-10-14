@@ -65,7 +65,7 @@ Dictionary::
     >>> dictionary.parse(u'{1::"one",2::"two",3::"three"}')
     [Dictionary({Integer(1): String(u'one'), Integer(2): String(u'two'), Integer(3): String(u'three')})]
     >>> dictionary.parse(u'{"one"::1,"two"::2,"three"::3}')
-    [Dictionary({String(u'one'): Integer(1), String(u'two'): Integer(2), String(u'three'): Integer(3)})]
+    [Dictionary({String(u'one'): Integer(1), String(u'three'): Integer(3), String(u'two'): Integer(2)})]
 
 """
 from lepl import *
