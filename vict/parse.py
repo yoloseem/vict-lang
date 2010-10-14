@@ -4,7 +4,7 @@ r""":mod:`vict.parse`
 Identifiers::
 
     >>> identifier.parse(u"xyz")
-    [u'xyz']
+    [Identifier(u'xyz')]
 
 Strings::
 
@@ -20,10 +20,20 @@ Booleans::
     >>> boolean.parse(u'False')
     [Boolean(False)]
 
+None::
+
+    >>> none.parse(u"None")
+    [None_()]
+
 Integer::
     
     >>> integer.parse(u'1234')
     [Integer(1234)]
+
+Float::
+
+    >>> floating.parse(u'123.45')
+    [Float(123.45)]
 
 Array::
 
@@ -46,10 +56,16 @@ Array::
     >>> array.parse(u'[1,2,3,None]')
     [Array([Integer(1), Integer(2), Integer(3), None_()])]
 
-None::
+Dictionary::
 
-    >>> none.parse(u"None")
-    [None_()]
+    >>> dictionary.parse(u'{key::value}')
+    [Dictionary({Identifier(u'key'): Identifier(u'value')})]
+    >>> dictionary.parse(u'{a::123,b::"jkl"}')
+    [Dictionary({Identifier(u'a'): Integer(123), Identifier(u'b'): String(u'jkl')})]
+    >>> dictionary.parse(u'{1::"one",2::"two",3::"three"}')
+    [Dictionary({Integer(1): String(u'one'), Integer(2): String(u'two'), Integer(3): String(u'three')})]
+    >>> dictionary.parse(u'{"one"::1,"two"::2,"three"::3}')
+    [Dictionary({String(u'one'): Integer(1), String(u'two'): Integer(2), String(u'three'): Integer(3)})]
 
 """
 from lepl import *
@@ -57,12 +73,12 @@ import vict.tree
 
 
 with DroppedSpace():
-    identifier = Regexp(ur'[A-Za-z_<>=!@?$%^&*+-/][0-9A-Za-z_<>=!@?$%^&*+-/]*')
+    identifier = Regexp(ur'[A-Za-z_<>=!@?$%^&*+-/][0-9A-Za-z_<>=!@?$%^&*+-/]*') > vict.tree.Identifier.parse
 
     string = String() > vict.tree.String.parse
     boolean = Literals(u'True', u'False') > vict.tree.Boolean.parse
     integer = Integer() > vict.tree.Integer.parse
-    floating = Float()
+    floating = Float() > vict.tree.Float.parse
     none = Literal(u'None') > vict.tree.None_.parse
     literal = string | boolean | integer | floating | none
 
@@ -70,8 +86,9 @@ with DroppedSpace():
     array = Literal(u"[") / (expression / u",")[:] / expression[:1] / u"]" > vict.tree.Array.parse
 
     key = literal | identifier | (Literal(u'(') / expression / u')')
+    
     pair = key / u"::" / expression
-    dictionary = Literal(u"{") / (pair / u",")[:] / pair[:1] / u"}"
+    dictionary = Literal(u"{") / (pair / u",")[:] / pair[:1] / u"}" > vict.tree.Dictionary.parse
 
     expression += (literal | array | dictionary | identifier) \
                 | ('(' / expression / ')')

@@ -16,6 +16,8 @@ class Literal(Expression):
 
 class Integer(Literal):
 
+    __slots__ = "value",
+
     def __init__(self, value):
         self.value = int(value)
 
@@ -24,7 +26,13 @@ class Integer(Literal):
 
 class Float(Literal):
 
-    pass
+    __slots__ = "value",
+
+    def __init__(self, value):
+        self.value = float(value)
+
+    def __repr__(self):
+        return "Float({0!r})".format(self.value)
 
 class String(Literal, unicode):
 
@@ -71,7 +79,27 @@ class Array(Expression, tuple):
         endpos = -2 if len(self) == 1 else -1
         return "Array([{0}])".format(tuple.__repr__(self)[1:endpos])
 
+class Dictionary(Expression, dict):
+
+    @staticmethod
+    def parse(result):
+        a = dict()
+        for i, x in enumerate(result):
+            if x == u'::':
+                a.__setitem__(result[i-1], result[i+1])
+        return Dictionary(a)
+
+    def __repr__(self):
+        if not self:
+            return "Dictionary()"
+        return "Dictionary({0})".format(dict.__repr__(self))
+
 class Identifier(Expression):
 
-    pass
+    __slots__ = "identifier",
 
+    def __init__(self, identifier):
+        self.identifier = identifier
+
+    def __repr__(self):
+        return "Identifier({0})".format(unicode.__repr__(self.identifier))
