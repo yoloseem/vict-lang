@@ -49,8 +49,15 @@ class Boolean(Literal):
 
 class None_(Literal):
 
-    pass
+    @staticmethod
+    def parse(result):
+        return None_()
 
+    def __init__(self):
+        pass
+
+    def __repr__(self):
+        return "None_()"
 
 class Array(Expression, tuple):
 
@@ -63,8 +70,6 @@ class Array(Expression, tuple):
             return "Array()"
         endpos = -2 if len(self) == 1 else -1
         return "Array([{0}])".format(tuple.__repr__(self)[1:endpos])
-
-Array()
 
 class Identifier(Expression):
 

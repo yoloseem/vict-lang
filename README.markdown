@@ -1,8 +1,8 @@
-Vict
+Vict programming language
 ====
 
-Vict programming language
--------------------------
+Syntax
+------
 
 Author
 ------

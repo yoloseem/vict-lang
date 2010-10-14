@@ -43,7 +43,13 @@ Array::
     [Array([Integer(1), Integer(2), Integer(3)])]
     >>> array.parse(u'[1,2,3,4]')
     [Array([Integer(1), Integer(2), Integer(3), Integer(4)])]
+    >>> array.parse(u'[1,2,3,None]')
+    [Array([Integer(1), Integer(2), Integer(3), None_()])]
 
+None::
+
+    >>> none.parse(u"None")
+    [None_()]
 
 """
 from lepl import *
@@ -57,7 +63,7 @@ with DroppedSpace():
     boolean = Literals(u'True', u'False') > vict.tree.Boolean.parse
     integer = Integer() > vict.tree.Integer.parse
     floating = Float()
-    none = Literal(u'None')
+    none = Literal(u'None') > vict.tree.None_.parse
     literal = string | boolean | integer | floating | none
 
     expression = Delayed()
