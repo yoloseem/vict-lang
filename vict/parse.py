@@ -69,6 +69,8 @@ Dictionary::
     [Dictionary({Integer(1): String(u'one'), Integer(2): String(u'two'), Integer(3): String(u'three')})]
     >>> dictionary.parse(u'{"one"::1,"two"::2,"three"::3}')
     [Dictionary({String(u'one'): Integer(1), String(u'three'): Integer(3), String(u'two'): Integer(2)})]
+    >>> dictionary.parse(u'{"name"::"hyunjun",likes::["books","musics","cs"]}')
+    [Dictionary({Identifier(u'likes'): Array([String(u'books'), String(u'musics'), String(u'cs')]), String(u'name'): String(u'hyunjun')})]
 
 """
 
