@@ -55,6 +55,9 @@ Array::
     [Array([Integer(1), Integer(2), Integer(3), Integer(4)])]
     >>> array.parse(u'[1,2,3,None]')
     [Array([Integer(1), Integer(2), Integer(3), None_()])]
+    >>> array.parse(u'[1,[2,3],3]')
+    [Array([Integer(1), Array([Integer(2), Integer(3)]), Integer(3)])]
+
 
 Dictionary::
 
@@ -68,9 +71,9 @@ Dictionary::
     [Dictionary({String(u'one'): Integer(1), String(u'three'): Integer(3), String(u'two'): Integer(2)})]
 
 """
+
 from lepl import *
 import vict.tree
-
 
 with DroppedSpace():
     identifier = Regexp(ur'[A-Za-z_<>=!@?$%^&*+-/][0-9A-Za-z_<>=!@?$%^&*+-/]*') > vict.tree.Identifier.parse
