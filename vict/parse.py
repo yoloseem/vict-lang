@@ -57,6 +57,8 @@ Array::
     [Array([Integer(1), Integer(2), Integer(3), None_()])]
     >>> array.parse(u'[1,[2,3],3]')
     [Array([Integer(1), Array([Integer(2), Integer(3)]), Integer(3)])]
+    >>> array.parse(u'[1,   2  , 3]')
+    [Array([Integer(1), Integer(2), Integer(3)])]
 
 
 Dictionary::
@@ -72,31 +74,98 @@ Dictionary::
     >>> dictionary.parse(u'{"name"::"hyunjun",likes::["books","musics","cs"]}')
     [Dictionary({Identifier(u'likes'): Array([String(u'books'), String(u'musics'), String(u'cs')]), String(u'name'): String(u'hyunjun')})]
 
+Method Arguments::
+
+    >>> method_args.parse(u'x y')
+    [MethodArgument([Identifier(u'x'), Identifier(u'y')])]
+    >>> method_args.parse(u'')
+    [MethodArgument()]
+
+Set::
+
+    >>> setter.parse(u'somevariable is 123')
+    [Set(Identifier(u'somevariable'), Integer(123))]
+
+    >>> setter.parse(u'somehash is {"key"::"value"}')
+    [Set(Identifier(u'somehash'), Dictionary({String(u'key'): String(u'value')}))]
+
+    >>> setter.parse(u'somehash is {"key"::["value", 1, 2]}')
+    [Set(Identifier(u'somehash'), Dictionary({String(u'key'): Array([String(u'value'), Integer(1), Integer(2)])}))]
+
+    >>> setter.parse(u'somemethod is method x y do pass end')
+    [Set(Identifier(u'somemethod'), Method(MethodArgument([Identifier(u'x'), Identifier(u'y')]), Program([Pass_()])))]
+
+Method::
+   
+    >>> method.parse(u'method    a   b      c  do pass   end')
+    [Method(MethodArgument([Identifier(u'a'), Identifier(u'b'), Identifier(u'c')]), Program([Pass_()]))]
+
+    >>> method.parse(u'method do pass end')
+    [Method(MethodArgument(), Program([Pass_()]))]
+
+Line::
+
+    >>> line.parse(u'pass')
+    [Pass_()]
+    >>> line.parse(u'somemethod is method x y do pass end')
+    [Set(Identifier(u'somemethod'), Method(MethodArgument([Identifier(u'x'), Identifier(u'y')]), Program([Pass_()])))]
+
 """
 
 from lepl import *
 import vict.tree
 
+spaces = ~Space()[:]
 with DroppedSpace():
-    identifier = Regexp(ur'[A-Za-z_<>=!@?$%^&*+-/][0-9A-Za-z_<>=!@?$%^&*+-/]*') > vict.tree.Identifier.parse
+    identifier = Regexp(ur'[A-Za-z_<>=!@?$%^&*+-/][0-9A-Za-z_<>=!@?$%^&*+-/]*') \
+               > vict.tree.Identifier.parse
 
-    string = String() > vict.tree.String.parse
-    boolean = Literals(u'True', u'False') > vict.tree.Boolean.parse
-    integer = Integer() > vict.tree.Integer.parse
-    floating = Float() > vict.tree.Float.parse
-    none = Literal(u'None') > vict.tree.None_.parse
+    string = String() \
+           > vict.tree.String.parse
+    boolean = Literals(u'True', u'False') \
+            > vict.tree.Boolean.parse
+    integer = Integer() \
+            > vict.tree.Integer.parse
+    floating = Float() \
+             > vict.tree.Float.parse
+    none = Literal(u'None') \
+         > vict.tree.None_.parse
+
     literal = string | boolean | integer | floating | none
 
     expression = Delayed()
-    array = Literal(u"[") / (expression / u",")[:] / expression[:1] / u"]" > vict.tree.Array.parse
+    array = Literal(u"[") \
+          & (expression & u",")[:] & expression[:1] \
+          & u"]" \
+          > vict.tree.Array.parse
 
-    key = literal | identifier | (Literal(u'(') / expression / u')')
+    key = literal | identifier \
+        | (Literal(u'(') & expression & u')')
     
-    pair = key / u"::" / expression
-    dictionary = Literal(u"{") / (pair / u",")[:] / pair[:1] / u"}" > vict.tree.Dictionary.parse
+    pair = key & u"::" & expression
+    dictionary = Literal(u"{") \
+               & (pair & u",")[:] & pair[:1] \
+               & u"}" \
+               > vict.tree.Dictionary.parse
 
-    expression += (literal | array | dictionary | identifier) \
-                | ('(' / expression / ')')
+    line = Delayed()
+    program = line[1:] > vict.tree.Program.parse
+
+    method_args = identifier[:] \
+                > vict.tree.MethodArgument.parse
+    method = Literal(u"method") & method_args \
+           & (u'do' & program & u'end') \
+           > vict.tree.Method.parse
+
+    pass_ = Literal(u'pass') \
+          > vict.tree.Pass_.parse
+    expression += method \
+                | (literal | array | dictionary | identifier) \
+                | (u'(' & expression & u')')
+
+    setter = identifier & Literal(u'is') & expression \
+           > vict.tree.Set.parse
+    line += pass_ | setter
 
 
 if __name__ == "__main__":

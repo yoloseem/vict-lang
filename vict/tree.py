@@ -9,6 +9,38 @@ class Expression(object):
     def parse(cls, result):
         return cls(result[0])
 
+class Line(object):
+
+    pass
+
+class Set(Line):
+
+    __slots__ = "left", "right",
+
+    @staticmethod
+    def parse(result):
+        return Set(result[0], result[2])
+
+    def __init__(self, left_operand, right_operand):
+        self.left = left_operand
+        self.right = right_operand
+    
+    def __repr__(self):
+        return "Set({0!r}, {1!r})".format(self.left, self.right)
+
+class Program(object):
+
+    __slots__ = "lines",
+
+    @staticmethod
+    def parse(result):
+        return Program(result)
+
+    def __init__(self, lines):
+        self.lines = lines
+
+    def __repr__(self):
+        return "Program({0!r})".format(self.lines)
 
 class Literal(Expression):
 
@@ -67,6 +99,18 @@ class None_(Literal):
     def __repr__(self):
         return "None_()"
 
+class Pass_(Expression):
+
+    @staticmethod
+    def parse(result):
+        return Pass_()
+
+    def __init__(self):
+        pass
+
+    def __repr__(self):
+        return "Pass_()"
+
 class Array(Expression, tuple):
 
     @staticmethod
@@ -107,3 +151,30 @@ class Identifier(Expression):
 
     def __repr__(self):
         return "Identifier({0})".format(unicode.__repr__(self.identifier))
+
+class MethodArgument(Array):
+   
+    @staticmethod
+    def parse(result):
+        return MethodArgument(x for x in result if isinstance(x, Expression))
+    
+    def __repr__(self):
+        if not self:
+            return "MethodArgument()"
+        endpos = -2 if len(self) == 1 else -1
+        return "MethodArgument([{0}])".format(tuple.__repr__(self)[1:endpos])
+
+class Method(Expression):
+
+    __slots__ = "arguments", "program"
+
+    def __init__(self, args, exprs):
+        self.arguments = args
+        self.program = exprs
+
+    @staticmethod
+    def parse(result):
+        return Method(result[1], result[3])
+
+    def __repr__(self):
+        return "Method({0!r}, {1!r})".format(self.arguments, self.program)
