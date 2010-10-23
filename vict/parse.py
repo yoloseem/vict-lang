@@ -103,12 +103,22 @@ Method::
     >>> method.parse(u'method do pass end')
     [Method(MethodArgument(), Program([Pass_()]))]
 
+Call::
+
+    >>> call.parse(u'(1 :!plus: 2)')
+    [Call(Identifier(u'plus'), CallArgument([Integer(1), Integer(2)]))]
+
+    >>> call.parse(u'(1 2 3:!manyargs:4 5 6)')
+    [Call(Identifier(u'manyargs'), CallArgument([Integer(1), Integer(2), Integer(3), Integer(4), Integer(5), Integer(6)]))]
+
 Line::
 
     >>> line.parse(u'pass')
     [Pass_()]
     >>> line.parse(u'somemethod is method x y do pass end')
     [Set(Identifier(u'somemethod'), Method(MethodArgument([Identifier(u'x'), Identifier(u'y')]), Program([Pass_()])))]
+    >>> line.parse(u'methodwrapper is method x y do (x :!method: y) end')
+    [Set(Identifier(u'methodwrapper'), Method(MethodArgument([Identifier(u'x'), Identifier(u'y')]), Program([Call(Identifier(u'method'), CallArgument([Identifier(u'x'), Identifier(u'y')]))])))]
 
 """
 
@@ -117,7 +127,7 @@ import vict.tree
 
 spaces = ~Space()[:]
 with DroppedSpace():
-    identifier = Regexp(ur'[A-Za-z_<>=!@?$%^&*+-/][0-9A-Za-z_<>=!@?$%^&*+-/]*') \
+    identifier = Regexp(ur'[A-Za-z_<>=@?$%^&*+-/][0-9A-Za-z_<>=@?$%^&*+-/]*') \
                > vict.tree.Identifier.parse
 
     string = String() \
@@ -135,8 +145,8 @@ with DroppedSpace():
 
     expression = Delayed()
     array = Literal(u"[") \
-          & (expression & u",")[:] & expression[:1] \
-          & u"]" \
+            & (expression & u",")[:] & expression[:1] \
+            & u"]" \
           > vict.tree.Array.parse
 
     key = literal | identifier \
@@ -144,8 +154,8 @@ with DroppedSpace():
     
     pair = key & u"::" & expression
     dictionary = Literal(u"{") \
-               & (pair & u",")[:] & pair[:1] \
-               & u"}" \
+                 & (pair & u",")[:] & pair[:1] \
+                 & u"}" \
                > vict.tree.Dictionary.parse
 
     line = Delayed()
@@ -154,18 +164,28 @@ with DroppedSpace():
     method_args = identifier[:] \
                 > vict.tree.MethodArgument.parse
     method = Literal(u"method") & method_args \
-           & (u'do' & program & u'end') \
+             & (u'do' & program & u'end') \
            > vict.tree.Method.parse
+
+    call = Delayed()
+    call_args = expression[:] \
+              > vict.tree.CallArgument.parse
+    caller = identifier | (Literal(u'(') & method & u')') \
+           | call
+    call += Literal(u'(') & call_args & u':' \
+            & u'!' & caller & u':' & call_args & u')' \
+          > vict.tree.Call.parse
 
     pass_ = Literal(u'pass') \
           > vict.tree.Pass_.parse
-    expression += method \
+    expression += method | call \
                 | (literal | array | dictionary | identifier) \
                 | (u'(' & expression & u')')
 
     setter = identifier & Literal(u'is') & expression \
            > vict.tree.Set.parse
-    line += pass_ | setter
+    
+    line += pass_ | setter | call
 
 
 if __name__ == "__main__":

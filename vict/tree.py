@@ -178,3 +178,31 @@ class Method(Expression):
 
     def __repr__(self):
         return "Method({0!r}, {1!r})".format(self.arguments, self.program)
+
+class CallArgument(Array):
+   
+    @staticmethod
+    def parse(result):
+        return CallArgument(x for x in result if isinstance(x, Expression))
+    
+    def __repr__(self):
+        if not self:
+            return "CallArgument()"
+        endpos = -2 if len(self) == 1 else -1
+        return "CallArgument([{0}])".format(tuple.__repr__(self)[1:endpos])
+
+class Call(Expression, Line):
+    
+    __slots__ = "method", "arguments"
+
+    @staticmethod
+    def parse(result):
+        args = CallArgument(result[1]+result[6])
+        return Call(result[4], args)
+
+    def __init__(self, method, args):
+        self.method = method
+        self.arguments = args
+
+    def __repr__(self):
+        return "Call({0!r}, {1!r})".format(self.method, self.arguments)
