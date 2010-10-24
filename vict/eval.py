@@ -11,11 +11,13 @@ def evaluate(ast, env):
 
     if type(ast) is list:
         for item in ast:
-            evaluate(item, env)
+            ret = evaluate(item, env)
+        return ret
 
     if type(ast) is vict.tree.Program:
         for line in ast.lines:
-            evaluate(line, env)
+            ret = evaluate(line, env)
+        return ret
 
     if type(ast) is vict.tree.Identifier:
         return env.get(ast.identifier)
@@ -23,6 +25,7 @@ def evaluate(ast, env):
     if type(ast) is vict.tree.Set:
         if type(ast.left) is vict.tree.Identifier:
             env.set_(ast.left.identifier, evaluate(ast.right, env))
+            return env.get(ast.left.identifier)
 
     if type(ast) is vict.tree.Dictionary:
         for key in ast.keys():
@@ -41,10 +44,22 @@ def evaluate(ast, env):
     if type(ast) is vict.tree.Method:
         return ast
 
+    if type(ast) is vict.tree.Call:
+        func = evaluate(ast.method, env)
+        if type(func) is vict.tree.Method:
+            print "vict.tree.Method"
+        elif type(func) is vict.tree.Function:
+            return func.func(*[evaluate(x, env) for x in list(ast.arguments)]) 
+        else:
+            raise TypeError('{0!r} is not callable'.format(func))
+ 
+            
+
 if __name__ == "__main__":
     code = open("vict/test2.vict").read()
     code = unicode(' '.join(code.split('\n')))
     ast = vict.parse.program.parse(code)
     env = vict.env.built_in_env()
-    evaluate(ast, env)
-    print env.env
+    ret = evaluate(ast, env)
+    if ret:
+        print ret
