@@ -139,6 +139,9 @@ class Boolean(Literal):
     def __repr__(self):
         return "Boolean({0!r})".format(self.value)
 
+    def __vict__(self):
+        return unicode(self.value)
+
 
 class None_(Literal):
 
@@ -151,6 +154,9 @@ class None_(Literal):
 
     def __repr__(self):
         return "None_()"
+
+    def __vict__(self):
+        return unicode(None)
 
 class Pass_(Expression):
 
@@ -175,6 +181,12 @@ class Array(Expression, tuple):
             return "Array()"
         endpos = -2 if len(self) == 1 else -1
         return "Array([{0}])".format(tuple.__repr__(self)[1:endpos])
+
+    def __add__(self, other):
+        return Array(list(self) + list(other))
+
+    def __vict__(self):
+        return u'[' + u', '.join([x.__vict__() for x in self]) + u']'
 
 class Dictionary(Expression, dict):
 
