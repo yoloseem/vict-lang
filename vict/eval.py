@@ -47,7 +47,12 @@ def evaluate(ast, env):
     if type(ast) is vict.tree.Call:
         func = evaluate(ast.method, env)
         if type(func) is vict.tree.Method:
-            print "vict.tree.Method"
+            new_env = vict.env.Environment(env)
+            if len(ast.arguments) != len(func.arguments):
+                raise TypeError('{0!r} takes only {1} argument(s) ({2} given)'.format(ast.method, len(func.arguments), len(ast.arguments)))
+            for i, x in enumerate(func.arguments):
+                new_env.env.__setitem__(x.identifier, evaluate(list(ast.arguments)[i], env))
+            return evaluate(func.program, new_env)
         elif type(func) is vict.tree.Function:
             return func.func(*[evaluate(x, env) for x in list(ast.arguments)]) 
         else:
