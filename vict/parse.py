@@ -136,7 +136,7 @@ import vict.tree
 
 spaces = ~Space()[:]
 with DroppedSpace():
-    identifier = Regexp(ur'[A-Za-z_<>=@?$%^&*+-/][0-9A-Za-z_<>=@?$%^&*+-/]*') \
+    identifier = Regexp(ur'[A-Za-z_<>=@?$%^&*+/-][0-9A-Za-z_<>=@?$%^&*+/-]*') \
                > vict.tree.Identifier.parse
 
     string = String() \
