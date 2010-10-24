@@ -216,3 +216,13 @@ class Call(Expression, Line):
 
     def __repr__(self):
         return "Call({0!r}, {1!r})".format(self.method, self.arguments)
+
+class Function(object):
+
+    __slots__ = "func",
+
+    def __init__(self, func):
+        self.func = func
+
+    def __repr__(self):
+        return "Function({0!r})".format(self.func)
