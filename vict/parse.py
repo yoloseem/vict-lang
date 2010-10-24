@@ -128,6 +128,7 @@ Program::
 """
 
 from lepl import *
+import vict.parse
 import vict.tree
 
 spaces = ~Space()[:]
@@ -194,7 +195,8 @@ with DroppedSpace():
     setter = identifier & Literal(u'is') & expression \
            > vict.tree.Set.parse
     
-    line += pass_ | setter | call
+    line += (pass_ | setter | call) & (u'\n')[0:1] \
+	  > vict.tree.Line.parse
 
 
 if __name__ == "__main__":

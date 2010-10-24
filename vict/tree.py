@@ -19,7 +19,9 @@ class WrappedExpression(Expression):
 
 class Line(object):
 
-    pass
+    @staticmethod
+    def parse(result):
+        return result[0]
 
 class Set(Line):
 
