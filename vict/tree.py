@@ -66,6 +66,21 @@ class Integer(Literal):
     def __repr__(self):
         return "Integer({0!r})".format(self.value)
 
+    def __vict__(self):
+        return str(self.value)
+
+    def __add__(self, other):
+        return Integer(self.value + other.value)
+
+    def __sub__(self, other):
+	return Integer(self.value - other.value)
+
+    def __mul__(self, other):
+        return Integer(self.value * other.value)
+
+    def __div__(self, other):
+        return Integer(self.value / other.value)
+
 class Float(Literal):
 
     __slots__ = "value",
@@ -76,11 +91,36 @@ class Float(Literal):
     def __repr__(self):
         return "Float({0!r})".format(self.value)
 
+    def __add__(self, other):
+        return self.value + other.value
+
+    def __sub__(self, other):
+	return Integer(self.value - other.value)
+    
+    def __mul__(self, other):
+        return Integer(self.value * other.value)
+
+    def __div__(self, other):
+        return Integer(self.value / other.value)
+
 class String(Literal, unicode):
 
     def __repr__(self):
         return "String({0})".format(unicode.__repr__(self))
 
+    def __add__(self, other):
+        return self + other
+
+    def __mul__(self, other):
+        if type(other) is Integer:
+            return String(unicode(self) * other.value)
+        elif type(other) is int:
+            return String(unicode(self) * other)
+        else:
+            raise TypeError('* is only supported for String with Integer')
+
+    def __vict__(self):
+        return unicode(self)
 
 class Boolean(Literal):
 
