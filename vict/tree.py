@@ -91,6 +91,9 @@ class Float(Literal):
     def __repr__(self):
         return "Float({0!r})".format(self.value)
 
+    def __vict__(self):
+        return str(self.value)
+
     def __add__(self, other):
         return self.value + other.value
 
@@ -109,7 +112,7 @@ class String(Literal, unicode):
         return "String({0})".format(unicode.__repr__(self))
 
     def __add__(self, other):
-        return self + other
+        return String(unicode(self) + unicode(other.__vict__()))
 
     def __mul__(self, other):
         if type(other) is Integer:
