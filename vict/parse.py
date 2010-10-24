@@ -166,7 +166,7 @@ with DroppedSpace():
 
     line = Delayed()
 
-    program = line[1:] \
+    program = (line & (Literal(u'\n') | u'\t')[0:1])[1:]  \
             > vict.tree.Program.parse
 
     method_args = identifier[:] \
@@ -195,7 +195,7 @@ with DroppedSpace():
     setter = identifier & Literal(u'is') & expression \
            > vict.tree.Set.parse
     
-    line += (pass_ | setter | call) & (u'\n')[0:1] \
+    line += (pass_ | setter | call) \
 	  > vict.tree.Line.parse
 
 
