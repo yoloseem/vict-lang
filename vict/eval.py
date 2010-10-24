@@ -24,15 +24,26 @@ def evaluate(ast, env):
         if type(ast.left) is vict.tree.Identifier:
             env.set_(ast.left.identifier, evaluate(ast.right, env))
 
-    literals = [vict.tree.Integer, vict.tree.Float, \
+    if type(ast) is vict.tree.Dictionary:
+        for key in ast.keys():
+            ast[key] = evaluate(ast[key], env)
+        return ast
+
+    if type(ast) is vict.tree.Array:
+        return vict.tree.Array(evaluate(x, env) for x in list(ast))
+
+    literals = [vict.tree.Integer, vict.tree.Float,
                 vict.tree.String, vict.tree.Boolean,
                 vict.tree.None_]
     if type(ast) in literals:
         return ast
 
+    if type(ast) is vict.tree.Method:
+        return ast
+
 if __name__ == "__main__":
     code = open("vict/test2.vict").read()
-    code = unicode(code.replace('\t', ' '))
+    code = unicode(' '.join(code.split('\n')))
     ast = vict.parse.program.parse(code)
     env = vict.env.built_in_env()
     evaluate(ast, env)

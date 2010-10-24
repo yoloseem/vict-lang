@@ -166,7 +166,7 @@ with DroppedSpace():
 
     line = Delayed()
 
-    program = (line & (Literal(u'\n') | u'\t')[0:1])[1:]  \
+    program = (line & (Literal(u'\n') | u'\t')[:])[1:]  \
             > vict.tree.Program.parse
 
     method_args = identifier[:] \
