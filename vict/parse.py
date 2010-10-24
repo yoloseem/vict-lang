@@ -120,6 +120,11 @@ Line::
     >>> line.parse(u'methodwrapper is method x y do (x :!method: y) end')
     [Set(Identifier(u'methodwrapper'), Method(MethodArgument([Identifier(u'x'), Identifier(u'y')]), Program([Call(Identifier(u'method'), CallArgument([Identifier(u'x'), Identifier(u'y')]))])))]
 
+Program::
+
+    >>> program.parse(u'''pass pass pass''')
+    [Program([Pass_(), Pass_(), Pass_()])]
+
 """
 
 from lepl import *
@@ -159,7 +164,9 @@ with DroppedSpace():
                > vict.tree.Dictionary.parse
 
     line = Delayed()
-    program = line[1:] > vict.tree.Program.parse
+
+    program = line[1:] \
+            > vict.tree.Program.parse
 
     method_args = identifier[:] \
                 > vict.tree.MethodArgument.parse
@@ -178,9 +185,11 @@ with DroppedSpace():
 
     pass_ = Literal(u'pass') \
           > vict.tree.Pass_.parse
+    wrapped_expr = Literal(u'(') & expression & u')' \
+                 > vict.tree.WrappedExpression.parse
     expression += method | call \
                 | (literal | array | dictionary | identifier) \
-                | (u'(' & expression & u')')
+                | wrapped_expr
 
     setter = identifier & Literal(u'is') & expression \
            > vict.tree.Set.parse

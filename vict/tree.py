@@ -3,11 +3,19 @@
 
 """
 
+import vict.parse
+
 class Expression(object):
 
     @classmethod
     def parse(cls, result):
         return cls(result[0])
+
+class WrappedExpression(Expression):
+
+    @staticmethod
+    def parse(result):
+        return result[1]
 
 class Line(object):
 
