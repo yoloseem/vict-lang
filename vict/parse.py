@@ -59,7 +59,10 @@ Array::
     [Array([Integer(1), Array([Integer(2), Integer(3)]), Integer(3)])]
     >>> array.parse(u'[1,   2  , 3]')
     [Array([Integer(1), Integer(2), Integer(3)])]
-
+    >>> array.parse(u'[a,b]')
+    [Array([Identifier(u'a'), Identifier(u'b')])]
+    >>> array.parse(u'[a, b]')
+    [Array([Identifier(u'a'), Identifier(u'b')])]
 
 Dictionary::
 
