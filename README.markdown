@@ -44,7 +44,9 @@ Following code defines a function calculates the average of two numbers.
         ((:!+: x y) :!/: 2)
     end
 
+There is no return keyword, so the function will return last calculation result automatically.
+
 Author
 ----
 
-Kim Hyunjun (kim@hyunjun.kr)
+Kim Hyunjun <kim@hyunjun.kr>
