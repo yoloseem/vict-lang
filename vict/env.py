@@ -20,7 +20,7 @@ class Environment(object):
         else:
             if self.parent is not None:
                 return self.parent.get(key)
-            raise NameError('Nondeclared {0!r}'.format(key))
+            raise NameError('Nondeclared identifier `{0}`'.format(key))
 
     def set_(self, key, value):
         self.env.__setitem__(key, value)

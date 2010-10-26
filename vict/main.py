@@ -18,12 +18,16 @@ if __name__ == "__main__":
             if code == 'exit':
                 break
             ast = vict.parse.line.parse(' '.join(code.split('\t')))
-            ret = vict.eval.evaluate(ast, env)
-            if ret:
-                try:
-                    print ret.__vict__()
-                except AttributeError:
-                    print ret
+            try:
+                ret = vict.eval.evaluate(ast, env)
+            except NameError, e:
+                print e
+            else:
+                if ret:
+                    try:
+                        print ret.__vict__()
+                    except AttributeError:
+                        print ret
     else:
         
         try:
