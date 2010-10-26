@@ -8,8 +8,24 @@ import sys
 if __name__ == "__main__":
 
     if len(sys.argv) == 1 or sys.argv[1].lower() == 'repl':
-        print "REPL mode"
+        
+        print "Vict-lang 0.1"
+        print "Type `help` for more information."
+        
+        env = vict.env.built_in_env()
+        while True:
+            code = raw_input('vict> ')
+            if code == 'exit':
+                break
+            ast = vict.parse.line.parse(' '.join(code.split('\t')))
+            ret = vict.eval.evaluate(ast, env)
+            if ret:
+                try:
+                    print ret.__vict__()
+                except NameError:
+                    print ret
     else:
+        
         try:
             code = open(sys.argv[1]).read()
         except:

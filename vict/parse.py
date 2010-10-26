@@ -198,7 +198,7 @@ with DroppedSpace():
     setter = identifier & Literal(u'is') & expression \
            > vict.tree.Set.parse
     
-    line += (pass_ | setter | call) \
+    line += (pass_ | setter | call) | expression \
 	  > vict.tree.Line.parse
 
 
