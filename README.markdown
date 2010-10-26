@@ -50,4 +50,4 @@ There is no return keyword, so the function will return last calculation result 
 Author
 ----
 
-Kim Hyunjun <kim@hyunjun.kr>
+Kim Hyunjun (kim@hyunjun.kr)
