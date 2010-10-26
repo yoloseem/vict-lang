@@ -262,8 +262,8 @@ class Call(Expression, Line):
 
     @staticmethod
     def parse(result):
-        args = CallArgument(result[1]+result[6])
-        return Call(result[4], args)
+        args = CallArgument(result[1]+result[5])
+        return Call(result[3], args)
 
     def __init__(self, method, args):
         self.method = method

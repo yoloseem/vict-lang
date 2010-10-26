@@ -11,6 +11,8 @@ def evaluate(ast, env):
 
     if type(ast) is list:
         for item in ast:
+            if item == '\n' or item == '\t':
+                continue
             ret = evaluate(item, env)
         return ret
 
@@ -54,16 +56,7 @@ def evaluate(ast, env):
                 new_env.env.__setitem__(x.identifier, evaluate(list(ast.arguments)[i], env))
             return evaluate(func.program, new_env)
         elif type(func) is vict.tree.Function:
-            return func.func(*[evaluate(x, env) for x in list(ast.arguments)]) 
+            return func.func(*[evaluate(x, env) for x in list(ast.arguments)])
         else:
             raise TypeError('{0!r} is not callable'.format(func))
  
-            
-
-if __name__ == "__main__":
-    code = open("vict/test2.vict").read()
-    ast = vict.parse.program.parse(code)
-    env = vict.env.built_in_env()
-    ret = evaluate(ast, env)
-    if ret:
-        print ret
