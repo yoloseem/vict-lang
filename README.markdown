@@ -29,11 +29,11 @@ Types
 Binding
 ----
 
-In Vict, there is no way to only assigning, but it exists with binding.
+In Vict, there is no way to only assigning, but it exists with binding.  
 You can bind literals or method with keyword `is` like following code:
     ten is 10
     fruits is ["Apple", "Banana", "Graph"]
-    user is {name:: "Jayden", age:: 17, likes:: ["watching movie", "playing soccer", "playing video games"]}
+    user is {"name":: "Jayden", "age":: 17, "likes":: ["watching movie", "playing soccer", "playing video games"]}
 
 Method
 ----
