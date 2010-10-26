@@ -108,10 +108,10 @@ Method::
 
 Call::
 
-    >>> call.parse(u'(1 :!plus: 2)')
+    >>> call.parse(u'(1 :plus: 2)')
     [Call(Identifier(u'plus'), CallArgument([Integer(1), Integer(2)]))]
 
-    >>> call.parse(u'(1 2 3:!manyargs:4 5 6)')
+    >>> call.parse(u'(1 2 3:manyargs:4 5 6)')
     [Call(Identifier(u'manyargs'), CallArgument([Integer(1), Integer(2), Integer(3), Integer(4), Integer(5), Integer(6)]))]
 
 Line::
@@ -120,7 +120,7 @@ Line::
     [Pass_()]
     >>> line.parse(u'somemethod is method x y do pass end')
     [Set(Identifier(u'somemethod'), Method(MethodArgument([Identifier(u'x'), Identifier(u'y')]), Program([Pass_()])))]
-    >>> line.parse(u'methodwrapper is method x y do (x :!method: y) end')
+    >>> line.parse(u'methodwrapper is method x y do (x :method: y) end')
     [Set(Identifier(u'methodwrapper'), Method(MethodArgument([Identifier(u'x'), Identifier(u'y')]), Program([Call(Identifier(u'method'), CallArgument([Identifier(u'x'), Identifier(u'y')]))])))]
 
 Program::
@@ -136,7 +136,7 @@ import vict.tree
 
 spaces = ~Space()[:]
 with DroppedSpace():
-    identifier = Regexp(ur'[A-Za-z_<>=@?$%^&*+/-][0-9A-Za-z_<>=@?$%^&*+/-]*') \
+    identifier = Regexp(ur'[A-Za-z_<>=@!?$%^&*+/-][0-9A-Za-z_<>=@!?$%^&*+/-]*') \
                > vict.tree.Identifier.parse
 
     string = String() \
@@ -184,7 +184,7 @@ with DroppedSpace():
     caller = identifier | (Literal(u'(') & method & u')') \
            | call
     call += Literal(u'(') & call_args & u':' \
-            & u'!' & caller & u':' & call_args & u')' \
+            & caller & u':' & call_args & u')' \
           > vict.tree.Call.parse
 
     pass_ = Literal(u'pass') \

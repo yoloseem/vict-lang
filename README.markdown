@@ -42,7 +42,7 @@ Method
 You can define plus function like this: `method arg1 arg2 ... do expr1 expr2 ... end`.  
 Following code defines a function calculates the average of two numbers.
     average is method x y do
-        ((:!+: x y) :!/: 2)
+        ((:+: x y) :/: 2)
     end
 
 There is no return keyword, so the function will return last calculation result automatically.

@@ -62,7 +62,6 @@ def evaluate(ast, env):
 
 if __name__ == "__main__":
     code = open("vict/test2.vict").read()
-    code = unicode(' '.join(code.split('\n')))
     ast = vict.parse.program.parse(code)
     env = vict.env.built_in_env()
     ret = evaluate(ast, env)
