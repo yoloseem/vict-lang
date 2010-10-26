@@ -19,7 +19,7 @@ Types
 Method
 ----
 
-    `method a b do (:!+: a b) end`
+`method a b do (:!+: a b) end`
 
 Author
 ----
