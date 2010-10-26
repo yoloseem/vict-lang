@@ -22,7 +22,7 @@ if __name__ == "__main__":
             if ret:
                 try:
                     print ret.__vict__()
-                except NameError:
+                except AttributeError:
                     print ret
     else:
         
