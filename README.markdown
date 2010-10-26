@@ -4,6 +4,38 @@ Vict programming language
 Vict is a programming language.  
 This, the Vict programming language, takes it name from 'Victoria', a member of Korean idol girl group f(x).
 
+Run
+----
+
+### Installation
+
+[Python](http://python.org) must be installed on your computer to run Vict-lang.  
+
+You can get the source code at my [GitHub Repository](http://github.com/kimjayd/vict-lang).
+    python setup.py install
+
+Vict-lang has dependency on [`Lepl`](http://www.acooke.org/lepl/).
+
+### Usage
+
+    python -m vict.main some/code.vict
+
+You can also use REPL mode.
+
+    python -m vict.main repl
+
+or just
+   
+    python -m vict.main
+
+    Vict-lang 0.1
+    Type `help` for more information.
+    vict> "Hello!"
+    Hello!
+    vict> 
+
+You can type `exit` to leave.
+
 Types
 ----
 
