@@ -9,17 +9,15 @@ Run
 
 ### Source Code
 
-Source code is available on GitHub [repository](http://github.com/kimjayd/vict-lang).
+Source code is available on GitHub repository.
 
     git clone git://github.com/kimjayd/vict-lang.git
 
 ### Installation
 
-[Python](http://python.org) must be installed on your computer to run Vict. 
+Python has to be installed to run Vict. 
 
     python setup.py install
-
-Vict-lang has dependency on [`Lepl`](http://www.acooke.org/lepl/).
 
 ### Usage
 
