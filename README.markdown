@@ -16,7 +16,7 @@ Types
 
 ### Boolean
 
-`True`/`False`/`None`
+`True` / `False`, `None`
 
 ### Array
 
@@ -33,6 +33,7 @@ You can define plus function like this: `method a b do (:!+: a b) end`.
 Following code defines a function calculates the average of two numbers.
     average is method x y do
         ((:!+: x y) :!/: 2)
+    end
 
 Author
 ----
