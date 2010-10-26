@@ -7,11 +7,16 @@ This, the Vict programming language, takes it name from 'Victoria', a member of 
 Run
 ----
 
+### Source Code
+
+Source code is available on GitHub [repository](http://github.com/kimjayd/vict-lang).
+
+    git clone git://github.com/kimjayd/vict-lang.git
+
 ### Installation
 
-[Python](http://python.org) must be installed on your computer to run Vict-lang.  
+[Python](http://python.org) must be installed on your computer to run Vict. 
 
-You can get the source code at my [GitHub Repository](http://github.com/kimjayd/vict-lang).
     python setup.py install
 
 Vict-lang has dependency on [`Lepl`](http://www.acooke.org/lepl/).
