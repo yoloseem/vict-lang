@@ -29,14 +29,51 @@ def built_in_env():
     
     env = Environment()
 
-    env.set_(u'+', vict.tree.Function(lambda x, y: x+y))
-    env.set_(u'-', vict.tree.Function(lambda x, y: x-y))
-    env.set_(u'*', vict.tree.Function(lambda x, y: x*y)) 
-    env.set_(u'/', vict.tree.Function(lambda x, y: x/y))
+    def bf_add(*args):
+        ret = list(args)[0]
+        for x in list(args)[1:]:
+            ret = ret + x
+        return ret
+    env.set_(u'+', vict.tree.Function(bf_add))
+    
+    def bf_sub(*args):
+        ret = list(args)[0]
+        for x in list(args)[1:]:
+            ret = ret - x
+        return ret
+    env.set_(u'-', vict.tree.Function(bf_sub))
+    
+    def bf_mul(*args):
+        ret = list(args)[0]
+        for x in list(args)[1:]:
+            ret = ret * x
+        return ret
+    env.set_(u'*', vict.tree.Function(bf_mul))
+    
+    def bf_div(*args):
+        ret = list(args)[0]
+        for x in list(args)[1:]:
+            ret = ret / x
+        return ret
+    env.set_(u'/', vict.tree.Function(bf_div))
+    
+    env.set_(u'<', vict.tree.Function(lambda x, y: x<y))
+    env.set_(u'<=', vict.tree.Function(lambda x, y: x<=y))
+    env.set_(u'>', vict.tree.Function(lambda x, y: x>y))
+    env.set_(u'>=', vict.tree.Function(lambda x, y: x>=y))
+    env.set_(u'=', vict.tree.Function(lambda x, y: x==y))
+    env.set_(u'!=', vict.tree.Function(lambda x, y: x!=y))
 
-    def printfunc(*lst):
-        for x in list(lst):
+    def bf_str(x):
+        try:
+            return vict.tree.String(x.__vict__())
+        except AttributeError:
+            return vict.tree.String(unicode(x))
+    env.set_(u'str', vict.tree.Function(bf_str))
+
+    def bf_print(*args):
+        for x in list(args):
             print x.__vict__()
-    env.set_(u'print', vict.tree.Function(printfunc))
+    env.set_(u'print', vict.tree.Function(bf_print))
 
     return env
