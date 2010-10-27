@@ -229,13 +229,21 @@ class MethodArgument(Array):
         endpos = -2 if len(self) == 1 else -1
         return "MethodArgument([{0}])".format(tuple.__repr__(self)[1:endpos])
 
+class Binder(object):
+
+    __slots__ = "place",    
+
+    def __init__(self, thing):
+        self.place = thing
+
 class Method(Expression):
 
-    __slots__ = "arguments", "program"
+    __slots__ = "arguments", "program", "bind",
 
     def __init__(self, args, exprs):
         self.arguments = args
         self.program = exprs
+        self.bind = Binder(self)
 
     @staticmethod
     def parse(result):
@@ -243,6 +251,9 @@ class Method(Expression):
 
     def __repr__(self):
         return "Method({0!r}, {1!r})".format(self.arguments, self.program)
+
+    def __vict__(self):
+        return "<Function at {0}>".format(repr(self.bind).split("at ")[1][:-1])
 
 class CallArgument(Array):
    
@@ -281,3 +292,6 @@ class Function(object):
 
     def __repr__(self):
         return "Function({0!r})".format(self.func)
+
+    def __vict__(self):
+        return "<Function at {0}>".format(repr(self.func).split('at ')[1][:-1])
