@@ -81,6 +81,24 @@ class Integer(Literal):
     def __div__(self, other):
         return Integer(self.value / other.value)
 
+    def __eq__(self, other):
+        return Boolean(self.value == other.value)
+
+    def __ne__(self, other):
+        return Boolean(self.value != other.value)
+
+    def __lt__(self, other):
+        return Boolean(self.value < other.value)
+
+    def __le__(self, other):
+        return Boolean(self.value <= other.value)
+
+    def __gt__(self, other):
+        return Boolean(self.value > other.value)
+
+    def __ge__(self, other):
+        return Boolean(self.value >= other.value)
+
 class Float(Literal):
 
     __slots__ = "value",
@@ -105,6 +123,24 @@ class Float(Literal):
 
     def __div__(self, other):
         return Integer(self.value / other.value)
+
+    def __eq__(self, other):
+        return Boolean(self.value == other.value)
+
+    def __ne__(self, other):
+        return Boolean(self.value != other.value)
+
+    def __lt__(self, other):
+        return Boolean(self.value < other.value)
+
+    def __le__(self, other):
+        return Boolean(self.value <= other.value)
+
+    def __gt__(self, other):
+        return Boolean(self.value > other.value)
+
+    def __ge__(self, other):
+        return Boolean(self.value >= other.value)
 
 class String(Literal, unicode):
 
