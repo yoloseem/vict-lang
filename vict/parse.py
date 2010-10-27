@@ -128,6 +128,15 @@ Program::
     >>> program.parse(u'''pass pass pass''')
     [Program([Pass_(), Pass_(), Pass_()])]
 
+
+If::
+
+    >>> expression.parse(u'if True do True end')
+    [If(Boolean(True), Program([Boolean(True)]))]
+
+    >>> expression.parse(u'if True do True else, pass end')
+    [If(Boolean(True), Program([Boolean(True)]), Program([Pass_()]))]
+
 """
 
 from lepl import *
@@ -138,6 +147,8 @@ spaces = ~Space()[:]
 with DroppedSpace():
     identifier = Regexp(ur'[A-Za-z_<>=@!?$%^&*+/-][0-9A-Za-z_<>=@!?$%^&*+/-]*') \
                > vict.tree.Identifier.parse
+
+    elsekey = Literal(u'else')
 
     string = String() \
            > vict.tree.String.parse
@@ -169,7 +180,7 @@ with DroppedSpace():
 
     line = Delayed()
 
-    program = (line & (Literal(u'\n') | u'\t')[:])[1:]  \
+    program = ((line & (Literal(u'\n') | u'\t')[:]) | elsekey)[1:]  \
             > vict.tree.Program.parse
 
     method_args = identifier[:] \
@@ -191,7 +202,12 @@ with DroppedSpace():
           > vict.tree.Pass_.parse
     wrapped_expr = Literal(u'(') & expression & u')' \
                  > vict.tree.WrappedExpression.parse
-    expression += method | call \
+
+    ifpraise = (Literal(u'if') & expression & u'do' & program & u'end') \
+             | (u'if' & expression & u'do' & program & u'else,' & program & u'end') \
+             > vict.tree.If.parse
+
+    expression += ifpraise | method | call \
                 | (literal | array | dictionary | identifier) \
                 | wrapped_expr
 

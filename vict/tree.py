@@ -23,6 +23,28 @@ class Line(object):
     def parse(result):
         return result[0]
 
+class If(object):
+
+    __slots__ = "cond", "ifp", "elsep",
+
+    @staticmethod
+    def parse(result):
+        if len(result) == 5:
+            return If(result[1], result[3])
+        elif len(result) == 7:
+            return If(result[1], result[3], result[5])
+    
+    def __init__(self, cond, ifp, elsep=None):
+        self.cond = cond
+        self.ifp = ifp
+        self.elsep = elsep
+
+    def __repr__(self):
+        if self.elsep:
+            return "If({0!r}, {1!r}, {2!r})".format(self.cond, self.ifp, self.elsep)
+        else:
+            return "If({0!r}, {1!r})".format(self.cond, self.ifp)
+
 class Set(Line):
 
     __slots__ = "left", "right",
@@ -73,7 +95,7 @@ class Integer(Literal):
         return Integer(self.value + other.value)
 
     def __sub__(self, other):
-	return Integer(self.value - other.value)
+    	return Integer(self.value - other.value)
 
     def __mul__(self, other):
         return Integer(self.value * other.value)
@@ -206,6 +228,9 @@ class Pass_(Expression):
     def __repr__(self):
         return "Pass_()"
 
+    def __vict__(self):
+        return ""
+
 class Array(Expression, tuple):
 
     @staticmethod
@@ -230,8 +255,9 @@ class Dictionary(Expression, dict):
     def parse(result):
         a = dict()
         for i, x in enumerate(result):
-            if x == u'::':
-                a.__setitem__(result[i-1], result[i+1])
+            if type(x) is unicode:
+                if x == u'::':
+                    a.__setitem__(result[i-1], result[i+1])
         return Dictionary(a)
 
     def __repr__(self):

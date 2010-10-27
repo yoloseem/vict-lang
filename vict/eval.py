@@ -59,4 +59,13 @@ def evaluate(ast, env):
             return func.func(*[evaluate(x, env) for x in list(ast.arguments)])
         else:
             raise TypeError('{0!r} is not callable'.format(func))
- 
+
+    if type(ast) is vict.tree.If:
+        cond = evaluate(ast.cond, env)
+        if cond is True or (type(cond) is vict.tree.Boolean and cond.value is True):
+            return evaluate(ast.ifp, env)
+        else:
+            if ast.elsep:
+                return evaluate(ast.elsep, env)
+            else:
+                return evaluate(vict.tree.Pass_(), env)
