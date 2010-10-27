@@ -2,7 +2,7 @@ Vict programming language
 ====
 
 Vict is a programming language.  
-This, the Vict programming language, takes it name from 'Victoria', a member of Korean idol girl group f(x).
+This, the Vict programming language, takes its name from 'Victoria', a member of Korean idol girl group f(x).
 
 Run
 ----
@@ -76,7 +76,7 @@ You can bind literals or method with keyword `is` like following code:
 Method
 ----
 
-You can define plus function like this: `method arg1 arg2 ... do expr1 expr2 ... end`.  
+You can define the function with following syntax: `method arg1 arg2 ... do expr1 expr2 ... end`.  
 Following code defines a function calculates the average of two numbers.
     average is method x y do
         ((:+: x y) :/: 2)
