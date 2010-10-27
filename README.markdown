@@ -82,6 +82,15 @@ Following code defines a function calculates the average of two numbers.
 
 There is no return keyword, so the function will return last calculation result automatically.
 
+if-else Statements
+----
+
+You can make if statement with following syntax:
+    (if cond do expr1 expr2 ... end)
+
+You can also make if-else statement.
+    (if cond do expr1 expr2 ... else expr3 expr4 ... end)
+
 Author
 ----
 
