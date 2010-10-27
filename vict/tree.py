@@ -29,10 +29,14 @@ class If(object):
 
     @staticmethod
     def parse(result):
-        if len(result) == 5:
-            return If(result[1], result[3])
-        elif len(result) == 7:
-            return If(result[1], result[3], result[5])
+        if len(result) == 7:
+            for i, x in enumerate(result[4].lines):
+                if type(x) is Identifier:
+                    if x.identifier == u"else":
+                        return If(result[2], Program(result[4].lines[:i]), Program(result[4].lines[i+1:]))
+            return If(result[2], result[4])
+        elif len(result) == 9:
+            return If(result[2], result[4], result[6])
     
     def __init__(self, cond, ifp, elsep=None):
         self.cond = cond
