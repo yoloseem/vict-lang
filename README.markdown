@@ -91,6 +91,12 @@ You can make if statement with following syntax:
 You can also make if-else statement.
     (if cond do expr1 expr2 ... else expr3 expr4 ... end)
 
+Following code defines the function calculate Factorial(n):
+    vict> factorial is method n do (if (n :=: 1) do 1 else (n :*: (:factorial: (n :-: 1))) end ) end
+    <Function at a1s2d3f4>
+    vict> (5 :factorial:)
+    120
+
 Author
 ----
 
