@@ -134,7 +134,7 @@ If::
     >>> expression.parse(u'if True do True end')
     [If(Boolean(True), Program([Boolean(True)]))]
 
-    >>> expression.parse(u'if True do True else, pass end')
+    >>> expression.parse(u'if True do True else pass end')
     [If(Boolean(True), Program([Boolean(True)]), Program([Pass_()]))]
 
 """
@@ -203,8 +203,8 @@ with DroppedSpace():
     wrapped_expr = Literal(u'(') & expression & u')' \
                  > vict.tree.WrappedExpression.parse
 
-    ifpraise = (Literal(u'if') & expression & u'do' & program & u'end') \
-             | (u'if' & expression & u'do' & program & u'else,' & program & u'end') \
+    ifpraise = (Literal(u'(') & u'if' & expression & u'do' & program & u'end' & u')') \
+             | (Literal(u'(') & u'if' & expression & u'do' & program & u'else,' & program & u'end' & u')') \
              > vict.tree.If.parse
 
     expression += ifpraise | method | call \

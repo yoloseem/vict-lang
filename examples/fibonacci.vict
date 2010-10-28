@@ -1,0 +1,7 @@
+fib is method n do
+	(if (n :<=: 1) do
+		1
+	else
+		((:fib: (n :-: 1)) :+: (:fib: (n :-: 2)))
+	end)
+end
