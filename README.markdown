@@ -56,7 +56,7 @@ Types
 
 ### Array
 
-`[1, 2, 3]`, `["apple", "banana", "graph"]`, `[["Kim Hyunjun", "Korea"], ["Victoria", "China"]]`
+`[1, 2, 3]`, `["apple", "banana", "grape"]`, `[["Kim Hyunjun", "Korea"], ["Victoria", "China"]]`
 
 ### Dictionary
 
@@ -65,7 +65,7 @@ Types
 Binding
 ----
 
-In Vict, there is no way to only assigning, but it exists with binding.  
+In Vict, there is no way to only assigning.
 You can bind literals or method with keyword `is` like following code:
     ten is 10
     fruits is ["Apple", "Banana", "Graph"]
