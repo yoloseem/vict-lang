@@ -105,4 +105,4 @@ Following code defines the function calculate Factorial(n):
 Author
 ----
 
-Kim Hyunjun (kim@hyunjun.kr)
+[Hyunjun Kim](https://yoloseem.github.io/)
