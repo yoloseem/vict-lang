@@ -1,8 +1,7 @@
 Vict programming language
 ====
 
-Vict is a programming language.  
-This, the Vict programming language, takes its name from 'Victoria', a member of Korean idol girl group f(x).
+Vict is a programming language. Vict took its name from Victoria.
 
 Run
 ----
